@@ -51,7 +51,7 @@ export function ManualVehicleForm(){
                 </div>
 
                 <div className="grid gap-5 sm:grid-cols-2">
-                    <FormField>
+                    <FormField id="make" label="make" required>
                         
                     </FormField>
                 </div>
