@@ -27,7 +27,7 @@ export function RegistrationPlateInput({
     const selectedCountry = countries.find((country) => country.code === countryCode) ?? countries[0];
 
     return(
-         <div className="flex overflow-hidden rounded-xl border-2 border-neutral-900 bg-white shadow-sm">
+         <div className="flex w-full max-v-md overflow-hidden rounded-xl border-2 border-neutral-900 bg-white shadow-sm">
             <label className="relative flex min-w-20 items-center justify-center bg-blue-700 text-white">
                 <span className="pointer-events-none font-semibold">
                     {selectedCountry.plateCode}

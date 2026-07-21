@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+:root {
+--background: #f4f0e8;
+--surface: #fffdf8;
+--surface-muted: #ece7dd;
+
+--foreground: #1e211e;
+--foreground-muted: #6e716b;
+--foreground-subtle: #8b8d87;
+
+--primary: #234538;
+--primary-hover: #19352b;
+--primary-foreground: #fffdf8;
+
+--accent: #a37a42;
+--accent-hover: #8d6938;
+
+--border: #d8d1c4;
+--border-strong: #b9b1a2;
+
+--danger: #8e3f3f;
+--danger-hover: #743232;
+
+--shadow-soft: 0 10px 30px rgba(30, 33, 30, 0.08);
+--shadow-card: 0 6px 18px rgba(30, 33, 30, 0.06);
+
+--radius-sm: 0.5rem;
+--radius-md: 0.75rem;
+--radius-lg: 1rem;
+}
+
+@theme inline {
+--color-background: var(--background);
+--color-surface: var(--surface);
+--color-surface-muted: var(--surface-muted);
+
+--color-foreground: var(--foreground);
+--color-foreground-muted: var(--foreground-muted);
+--color-foreground-subtle: var(--foreground-subtle);
+
+--color-primary: var(--primary);
+--color-primary-hover: var(--primary-hover);
+--color-primary-foreground: var(--primary-foreground);
+
+--color-accent: var(--accent);
+--color-accent-hover: var(--accent-hover);
+
+--color-border: var(--border);
+--color-border-strong: var(--border-strong);
+
+--color-danger: var(--danger);
+--color-danger-hover: var(--danger-hover);
+
+--font-sans: var(--font-geist-sans);
+--font-mono: var(--font-geist-mono);
+}
+
+* {
+  box-sizing: border-box;
+  }
+
+html {
+background: var(--background);
+color: var(--foreground);
+}
+
+body {
+min-height: 100vh;
+margin: 0;
+background:
+radial-gradient(
+circle at top left,
+rgba(163, 122, 66, 0.08),
+transparent 34rem
+),
+var(--background);
+color: var(--foreground);
+font-family:
+var(--font-geist-sans),
+Arial,
+Helvetica,
+sans-serif;
+text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+}
+
+a {
+color: inherit;
+text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+font: inherit;
+}
+
+button {
+cursor: pointer;
+}
+
+::selection {
+background: rgba(35, 69, 56, 0.2);
+color: var(--foreground);
+}
+
+:focus-visible {
+outline: 3px solid rgba(163, 122, 66, 0.45);
+outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+* {
+  scroll-behavior: smooth;
+  }
+  }
