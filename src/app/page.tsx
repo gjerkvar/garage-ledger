@@ -4,7 +4,6 @@ import { VehicleLookupForm } from "@/src/app/vehicles/VehicleLookupForm/VehicleL
 export default function Home() {
   return (
     <div>
-      <Header />
       <section className="mx-auto max-w-2xl text-center">
         <p className="text-sm font-semibold uppercase tracking-[0.25em] text-accent">
           Your digital garage

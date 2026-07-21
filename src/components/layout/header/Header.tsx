@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export function Header() {
   return (
-    <header className="border-b border-border bg-surface">
+    <header className="sticky top-0 border-b border-border bg-surface">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link
           href="/"
@@ -31,7 +31,7 @@ export function Header() {
 
         <nav className="flex items-center gap-5">
           <Link
-            href="/garage"
+            href="/vehicles/garage"
             className="hidden text-sm font-medium text-foreground-muted transition hover:text-foreground sm:block"
           >
             My garage

@@ -1,11 +1,13 @@
 type FormFieldProps = {
   label: string;
+  id: string;
   required?: boolean;
   children: React.ReactNode;
 };
 
 export function FormField({
   label,
+  id,
   required = false,
   children,
 }: FormFieldProps) {
