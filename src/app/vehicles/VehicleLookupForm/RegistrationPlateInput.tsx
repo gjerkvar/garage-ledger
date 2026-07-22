@@ -1,4 +1,4 @@
-export type CountryCode = "NO" | "SE" | "DK" | "FI" | "GB";
+export type CountryCode = "NO" | "SE" | "DK" | "FI" | "NL" | "DE" | "GB" | "US" | "JP" | "CH";
 
 type RegistrationPlateInputProps = {
     countryCode: CountryCode;

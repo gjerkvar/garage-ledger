@@ -2,10 +2,19 @@
 
 import { FormField } from "@/src/components/layout/FormField";
 import { FormEvent, useState } from "react";
-import { RegistrationPlateInput } from "./RegistrationPlateInput";
+import { CountryCode, RegistrationPlateInput } from "./RegistrationPlateInput";
 
 export type OwnershipStatus = "CURRENT" | "FORMER";
 export type MileageUnit = "KM" | "MI";
+export type CurrencyCode =
+  | "NOK"
+  | "SEK"
+  | "DKK"
+  | "EUR"
+  | "GBP"
+  | "USD"
+  | "JPY"
+  | "CHF";
 
 export type ManualVehicleFormData = {
   make: string;
@@ -20,8 +29,10 @@ export type ManualVehicleFormData = {
   currentMileage: string;
   mileageUnit: MileageUnit;
   nickname: string;
-  purchaseDate: string;
+  ownedFrom: string;
+  ownedTo: string;
   purchasePrice: string;
+  purchaseCurrency: CurrencyCode;
   status: OwnershipStatus;
   ownershipStory: string;
 };
@@ -49,8 +60,10 @@ export function ManualVehicleForm() {
     currentMileage: "",
     mileageUnit: "KM",
     nickname: "",
-    purchaseDate: "",
+    ownedFrom: "",
+    ownedTo: "",
     purchasePrice: "",
+    purchaseCurrency: "NOK",
     status: "CURRENT",
     ownershipStory: "",
   };
@@ -65,6 +78,46 @@ export function ManualVehicleForm() {
     setFormData((current: any) => ({
       ...current,
       [field]: value,
+    }));
+  }
+
+  const defaultCurrencyByCountry: Partial<Record<CountryCode, CurrencyCode>> = {
+    NO: "NOK",
+    SE: "SEK",
+    DK: "DKK",
+    FI: "EUR",
+    NL: "EUR",
+    DE: "EUR",
+    GB: "GBP",
+    US: "USD",
+    JP: "JPY",
+    CH: "CHF",
+  };
+
+  const defaultMileageUnitByCountry: Partial<Record<CountryCode, MileageUnit>> =
+    {
+      NO: "KM",
+      SE: "KM",
+      DK: "KM",
+      FI: "KM",
+      NL: "KM",
+      DE: "KM",
+      JP: "KM",
+      CH: "KM",
+      GB: "MI",
+      US: "MI",
+    };
+
+  function handleCountryChange(countryCode: CountryCode) {
+    setFormData((current) => ({
+      ...current,
+      registrationCountry: countryCode,
+
+      purchaseCurrency:
+        defaultCurrencyByCountry[countryCode] ?? current.purchaseCurrency,
+
+      mileageUnit:
+        defaultMileageUnitByCountry[countryCode] ?? current.mileageUnit,
     }));
   }
 
@@ -146,7 +199,7 @@ export function ManualVehicleForm() {
               id="registrationCountry"
               name="registrationCountry"
               className={inputClasses}
-              onChange={(event) => setSelectedCountry(event.target.value)}
+              onChange={(event) => handleCountryChange(event.target.value)}
             >
               {countries.map((country) => (
                 <option key={country.code} value={country.code}>
@@ -163,9 +216,7 @@ export function ManualVehicleForm() {
             <RegistrationPlateInput
               countryCode={formData.registrationCountry}
               registrationNumber={formData.registrationNumber}
-              onCountryChange={(country) =>
-                updateField("registrationCountry", country)
-              }
+              onCountryChange={(country) => handleCountryChange(country)}
               onRegistrationNumberChange={(registrationNumber) =>
                 updateField("registrationNumber", registrationNumber)
               }
@@ -318,53 +369,86 @@ export function ManualVehicleForm() {
             </select>
           </FormField>
 
-          <FormField id="purchaseDate" label="Purchase date">
+          <FormField id="ownedFrom" label="Owned since">
             <input
-              id="purchaseDate"
-              name="purchaseDate"
+              id="ownedFrom"
+              name="ownedFrom"
               type="date"
-              value={formData.purchaseDate}
-              onChange={(event) =>
-                updateField("purchaseDate", event.target.value)
-              }
+              value={formData.ownedFrom}
+              onChange={(event) => updateField("ownedFrom", event.target.value)}
               className={inputClasses}
             />
           </FormField>
 
+          {formData.status === "FORMER" && (
+            <FormField id="ownedFrom" label="Owned until">
+              <input
+                id="ownedFrom"
+                name="ownedFrom"
+                type="date"
+                value={formData.ownedFrom}
+                onChange={(event) =>
+                  updateField("ownedFrom", event.target.value)
+                }
+                className={inputClasses}
+              />
+            </FormField>
+          )}
+
           <FormField id="purchasePrice" label="Purchase price">
-            <div className="relative">
+            <div className="flex overflow-hidden rounded-xl border border-border-strong bg-surface transition focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
               <input
                 id="purchasePrice"
                 name="purchasePrice"
                 type="number"
                 min="0"
-                step="1"
+                step="0.01"
+                inputMode="decimal"
                 value={formData.purchasePrice}
                 onChange={(event) =>
                   updateField("purchasePrice", event.target.value)
                 }
-                placeholder="8500"
-                className={`${inputClasses} pr-16`}
+                placeholder="85000"
+                className="min-w-0 flex-1 bg-transparent px-4 py-3 text-foreground outline-none placeholder:text-foreground-subtle"
               />
 
-              <span className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-sm text-foreground-subtle">
-                NOK
-              </span>
+              <select
+                id="purchaseCurrency"
+                name="purchaseCurrency"
+                aria-label="Purchase currency"
+                value={formData.purchaseCurrency}
+                onChange={(event) =>
+                  updateField(
+                    "purchaseCurrency",
+                    event.target.value as CurrencyCode
+                  )
+                }
+                className="border-l border-border-strong bg-surface-muted px-3 py-3 text-sm font-semibold text-foreground outline-none"
+              >
+                <option value="NOK">NOK</option>
+                <option value="SEK">SEK</option>
+                <option value="DKK">DKK</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="USD">USD</option>
+                <option value="JPY">JPY</option>
+                <option value="CHF">CHF</option>
+              </select>
             </div>
           </FormField>
 
           <FormField id="ownershipStory" label="Ownership story">
-                <textarea
-                    id="ownershipStory"
-                    name="ownershipStory"
-                    rows={5}
-                    value={formData.ownershipStory}
-                    onChange={(event) =>
-                        updateField("ownershipStory", event.target.value)
-                    }
-                    placeholder="How did you find the vehicle? What makes it special?"
-                    className={`${inputClasses} resize-y`}
-                />
+            <textarea
+              id="ownershipStory"
+              name="ownershipStory"
+              rows={5}
+              value={formData.ownershipStory}
+              onChange={(event) =>
+                updateField("ownershipStory", event.target.value)
+              }
+              placeholder="How did you find the vehicle? What makes it special?"
+              className={`${inputClasses} resize-y`}
+            />
           </FormField>
         </div>
       </fieldset>
